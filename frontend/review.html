@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SIMShield AI - Human Review</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <main class="container">
+
+        <section class="hero">
+            <h1>👤 Human Review Center</h1>
+
+            <p>
+                Review AI fraud predictions and correct them when necessary.
+            </p>
+
+            <a href="index.html">
+                ← Back to Dashboard
+            </a>
+        </section>
+
+
+        <section class="card">
+
+            <h2>🔍 Pending Reviews</h2>
+
+            <p>
+                Human corrections help SIMShield AI improve future predictions.
+            </p>
+
+            <div id="reviewList">
+
+                <p id="loadingMessage">
+                    Loading pending transactions...
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <section class="card">
+
+            <h2>🧠 Human-Correction Loop</h2>
+
+            <div class="steps">
+
+                <div>
+                    <strong>1️⃣ AI Prediction</strong>
+                    <p>
+                        The ML model analyzes transaction signals.
+                    </p>
+                </div>
+
+                <div>
+                    <strong>2️⃣ Human Review</strong>
+                    <p>
+                        A reviewer confirms whether the prediction is correct.
+                    </p>
+                </div>
+
+                <div>
+                    <strong>3️⃣ Model Improvement</strong>
+                    <p>
+                        Human feedback becomes training data for future improvement.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script>
+
+        const API_BASE_URL = "http://127.0.0.1:5000";
+
+
+        async function loadPendingReviews() {
+
+            const reviewList =
+                document.getElementById("reviewList");
+
+            try {
+
+                const response =
+                    await fetch(
+                        API_BASE_URL + "/api/review/pending"
+                    );
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.error ||
+                        "Unable to load pending reviews"
+                    );
+
+                }
+
+        let transactions = [];
+
+if (Array.isArray(data)) {
+    transactions = data;
+} else if (Array.isArray(data.transactions)) {
+    transactions = data.transactions;
+} else if (Array.isArray(data.pending_reviews)) {
+    transactions = data.pending_reviews;
+} else if (Array.isArray(data.reviews)) {
+    transactions = data.reviews;
+}
+               
+
+                reviewList.innerHTML = "";
+
+
+                if (transactions.length === 0) {
+
+                    reviewList.innerHTML =
+                        "<p>✅ No pending transactions for review.</p>";
+
+                    return;
+
+                }
+
+
+                transactions.forEach(function (transaction) {
+
+                    const card =
+                        document.createElement("div");
+
+                    card.className = "card";
+
+
+                    card.innerHTML =
+
+                        "<h3>Transaction #" +
+                        escapeHTML(transaction.id) +
+                        "</h3>" +
+
+                        "<p><strong>User:</strong> " +
+                        escapeHTML(transaction.user_id) +
+                        "</p>" +
+
+                        "<p><strong>Risk Score:</strong> " +
+                        Number(
+                            transaction.risk_score || 0
+                        ).toFixed(1) +
+                        " / 100</p>" +
+
+                        "<p><strong>AI Risk Level:</strong> " +
+                        escapeHTML(
+                            transaction.risk_level || "-"
+                        ) +
+                        "</p>" +
+
+                        "<p><strong>AI Prediction:</strong> " +
+                        (
+                            transaction.fraud_prediction
+                                ? "🚨 Fraud"
+                                : "✅ Legitimate"
+                        ) +
+                        "</p>" +
+
+                        "<p><strong>Action:</strong> " +
+                        escapeHTML(
+                            transaction.action || "-"
+                        ) +
+                        "</p>" +
+
+                        "<div>" +
+
+                        "<button onclick=\"submitFeedback(" +
+                        transaction.id +
+                        ", true)\">" +
+
+                        "🚨 Confirm Fraud" +
+
+                        "</button>" +
+
+                        "<button onclick=\"submitFeedback(" +
+                        transaction.id +
+                        ", false)\">" +
+
+                        "✅ Mark Legitimate" +
+
+                        "</button>" +
+
+                        "</div>";
+
+
+                    reviewList.appendChild(card);
+
+                });
+
+
+            } catch (error) {
+
+                console.error(
+                    "Review loading error:",
+                    error
+                );
+
+                reviewList.innerHTML =
+                    "<p>❌ " +
+                    escapeHTML(error.message) +
+                    "</p>";
+
+            }
+
+        }
+
+
+        async function submitFeedback(
+            transactionId,
+            isFraud
+        ) {
+
+            try {
+
+                const response =
+                    await fetch(
+                        API_BASE_URL +
+                        "/api/review/feedback",
+                        {
+
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+                           body: JSON.stringify({
+
+    transaction_id:
+        transactionId,
+
+    reviewer_label:
+        isFraud ? 1 : 0,
+
+    reviewer:
+        "Hackathon Reviewer"
+
+})
+                           
+                        }
+                    );
+
+
+                const result =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        result.error ||
+                        "Unable to submit feedback"
+                    );
+
+                }
+
+
+                alert(
+                    "✅ Human feedback saved successfully!"
+                );
+
+
+                loadPendingReviews();
+
+
+            } catch (error) {
+
+                console.error(
+                    "Feedback error:",
+                    error
+                );
+
+                alert(
+                    "❌ Feedback error: " +
+                    error.message
+                );
+
+            }
+
+        }
+
+
+        function escapeHTML(value) {
+
+            if (
+                value === null ||
+                value === undefined
+            ) {
+
+                return "";
+
+            }
+
+
+            return String(value)
+
+                .replace(
+                    /&/g,
+                    "&amp;"
+                )
+
+                .replace(
+                    /</g,
+                    "&lt;"
+                )
+
+                .replace(
+                    />/g,
+                    "&gt;"
+                )
+
+                .replace(
+                    /"/g,
+                    "&quot;"
+                )
+
+                .replace(
+                    /'/g,
+                    "&#039;"
+                );
+
+        }
+
+
+        loadPendingReviews();
+
+    </script>
+
+</body>
+</html>

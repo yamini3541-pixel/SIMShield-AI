@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SIMShield AI</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <header class="header">
+
+        <div class="logo-section">
+
+            <div class="logo-icon">
+                🛡️
+            </div>
+
+            <div>
+                <h1>SIMShield AI</h1>
+
+                <p>
+                    Early SIM-Swap Fraud Detection
+                </p>
+            </div>
+
+        </div>
+
+        <div class="system-status">
+
+            <span class="status-dot"></span>
+
+            System Online
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         MAIN CONTAINER
+    ====================================================== -->
+
+    <main class="container">
+
+
+        <!-- =================================================
+             DASHBOARD CARDS
+        ================================================== -->
+
+        <section class="dashboard-cards">
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    📊
+                </div>
+
+                <div>
+                    <p>Total Transactions</p>
+
+                    <h2 id="totalTransactions">
+                        0
+                    </h2>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card high-card">
+
+                <div class="stat-icon">
+                    🚨
+                </div>
+
+                <div>
+                    <p>High Risk</p>
+
+                    <h2 id="highRisk">
+                        0
+                    </h2>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card medium-card">
+
+                <div class="stat-icon">
+                    ⚠️
+                </div>
+
+                <div>
+                    <p>Medium Risk</p>
+
+                    <h2 id="mediumRisk">
+                        0
+                    </h2>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card safe-card">
+
+                <div class="stat-icon">
+                    ✅
+                </div>
+
+                <div>
+                    <p>Low Risk</p>
+
+                    <h2 id="lowRisk">
+                        0
+                    </h2>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             FRAUD CHECK SECTION
+        ================================================== -->
+
+        <section class="main-grid">
+
+
+            <!-- =============================================
+                 INPUT FORM
+            ============================================== -->
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <h2>
+                            🔍 Fraud Risk Check
+                        </h2>
+
+                        <p>
+                            Analyze a transaction for suspicious SIM-swap signals.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <form id="fraudForm">
+
+
+                    <!-- USER ID -->
+
+                    <div class="form-group">
+
+                        <label for="userId">
+                            User ID
+                        </label>
+
+                        <input
+                            type="text"
+                            id="userId"
+                            placeholder="Example: U1001"
+                            value="U1001"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- SIM CHANGED -->
+
+                    <div class="form-group">
+
+                        <label for="simChanged">
+                            SIM Changed
+                        </label>
+
+                        <select id="simChanged">
+
+                            <option value="0">
+                                No
+                            </option>
+
+                            <option value="1">
+                                Yes
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- NEW DEVICE -->
+
+                    <div class="form-group">
+
+                        <label for="newDevice">
+                            New Device
+                        </label>
+
+                        <select id="newDevice">
+
+                            <option value="0">
+                                No
+                            </option>
+
+                            <option value="1">
+                                Yes
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- LOCATION CHANGE -->
+
+                    <div class="form-group">
+
+                        <label for="locationChanged">
+                            Location Changed
+                        </label>
+
+                        <select id="locationChanged">
+
+                            <option value="0">
+                                No
+                            </option>
+
+                            <option value="1">
+                                Yes
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- FAILED OTP -->
+
+                    <div class="form-group">
+
+                        <label for="failedOtp">
+                            Failed OTP Attempts
+                        </label>
+
+                        <input
+                            type="number"
+                            id="failedOtp"
+                            min="0"
+                            value="0"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- TRANSACTION AMOUNT -->
+
+                    <div class="form-group">
+
+                        <label for="transactionAmount">
+                            Transaction Amount (₹)
+                        </label>
+
+                        <input
+                            type="number"
+                            id="transactionAmount"
+                            min="0"
+                            value="5000"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- TRANSACTION VELOCITY -->
+
+                    <div class="form-group">
+
+                        <label for="transactionVelocity">
+                            Transactions in Short Period
+                        </label>
+
+                        <input
+                            type="number"
+                            id="transactionVelocity"
+                            min="0"
+                            value="1"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- SUBMIT BUTTON -->
+
+                    <button
+                        type="submit"
+                        class="check-button"
+                        id="checkButton"
+                    >
+
+                        🔍 Check Transaction
+
+                    </button>
+
+
+                </form>
+
+            </div>
+
+
+            <!-- =============================================
+                 RESULT PANEL
+            ============================================== -->
+
+            <div class="panel result-panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <h2>
+                            🛡️ AI Risk Assessment
+                        </h2>
+
+                        <p>
+                            AI-generated fraud analysis
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DEFAULT RESULT -->
+
+                <div
+                    id="resultPlaceholder"
+                    class="result-placeholder"
+                >
+
+                    <div class="placeholder-icon">
+                        🔐
+                    </div>
+
+                    <h3>
+                        Waiting for transaction
+                    </h3>
+
+                    <p>
+                        Enter transaction details and click
+                        <strong>Check Transaction</strong>
+                        to run the AI fraud analysis.
+                    </p>
+
+                </div>
+
+
+                <!-- ACTUAL RESULT -->
+
+                <div
+                    id="riskResult"
+                    class="risk-result hidden"
+                >
+
+                    <div
+                        id="riskBadge"
+                        class="risk-badge"
+                    >
+                        LOW RISK
+                    </div>
+
+
+                    <div class="risk-score">
+
+                        <span id="riskScore">
+                            0
+                        </span>
+
+                        <small>
+                            / 100
+                        </small>
+
+                    </div>
+
+
+                    <p
+                        id="riskDescription"
+                        class="risk-description"
+                    >
+                        Transaction appears safe.
+                    </p>
+
+
+                    <!-- ACTION -->
+
+                    <div class="action-box">
+
+                        <span>
+                            Recommended Action
+                        </span>
+
+                        <strong id="recommendedAction">
+                            ALLOW
+                        </strong>
+
+                    </div>
+
+
+                    <!-- REASONS -->
+
+                    <div class="reasons-section">
+
+                        <h3>
+                            ⚠️ Detection Signals
+                        </h3>
+
+                        <ul id="reasonsList">
+                        </ul>
+
+                    </div>
+
+
+                    <!-- TRANSACTION ID -->
+
+                    <div class="transaction-info">
+
+                        Transaction ID:
+
+                        <strong id="transactionId">
+                            -
+                        </strong>
+
+                    </div>
+
+                </div>
+<!-- LOST PHONE / NEW PHONE VERIFICATION -->
+<div id="recoveryVerification" class="recovery-verification hidden">
+
+    <div class="recovery-icon">📱</div>
+
+    <h3>Did you lose/change your phone?</h3>
+
+    <p>
+        SIMShield detected a high-risk transaction from a new phone.
+        If this is your new or replacement phone, continue with biometric verification.
+    </p>
+
+    <div class="recovery-buttons">
+
+      <button
+    type="button"
+    id="lostPhoneYes"
+    class="verification-button"
+onclick="showBiometricVerification()"
+>
+    Yes, I lost/changed my phone
+</button>
+
+       <button
+    type="button"
+    id="lostPhoneNo"
+    class="cancel-button"
+    onclick="cancelRecoveryVerification()"
+>
+            No
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- BIOMETRIC VERIFICATION -->
+
+<!-- BIOMETRIC VERIFICATION -->
+<div id="biometricVerification" class="biometric-verification hidden">
+
+    <div class="biometric-icon">🔐</div>
+
+    <h3>Biometric Verification</h3>
+
+    <p>
+        Additional verification is required before allowing this
+        high-risk recovery.
+    </p>
+
+    <button
+        type="button"
+        id="fingerprintButton"
+        class="verification-button"
+        onclick="startFingerprintDemo()"
+    >
+        👆 Start Fingerprint
+    </button>
+
+</div>
+
+
+<!-- FINGERPRINT RESULT -->
+<div id="fingerprintPanel" class="biometric-verification hidden">
+
+    <div class="biometric-icon">👆</div>
+
+    <h3>Fingerprint Verification</h3>
+
+    <p>Biometric Verification • Prototype Demo</p>
+
+    <div id="fingerprintStatus">
+        Ready to scan.
+    </div>
+
+    <div id="fingerprintAnimation">
+        👆
+    </div>
+
+    <div id="fingerprintActions" class="hidden">
+
+        <button
+            type="button"
+            class="verification-button"
+            onclick="fingerprintPassed()"
+        >
+            ✅ Fingerprint Accepted
+        </button>
+
+        <button
+            type="button"
+            class="cancel-button"
+            onclick="fingerprintFailed()"
+        >
+            ❌ Fingerprint Failed
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- EYESCAN PROTOTYPE -->
+<div id="eyeScanPanel" class="eye-scan-panel hidden">
+
+    <div class="eye-scan-icon">👁️</div>
+
+    <h3>EyeScan</h3>
+
+    <p>Biometric Verification • Prototype Demo</p>
+
+    <div id="scanStatus">
+        Ready to scan.
+    </div>
+
+    <div id="scanAnimation">
+        👁️
+    </div>
+
+    <button
+        type="button"
+        id="startEyeScan"
+        class="verification-button"
+        onclick="startEyeScanDemo()"
+    >
+        👁️ Start EyeScan
+    </button>
+
+    <div id="eyeScanActions" class="hidden">
+
+        <button
+            type="button"
+            id="eyeScanPass"
+            class="verification-button"
+            onclick="showEyeScanResult('pass')"
+        >
+            ✅ EyeScan Accepted
+        </button>
+
+        
+        <button
+            type="button"
+            id="eyeScanFail"
+            class="cancel-button"
+            onclick="showEyeScanResult('fail')"
+        >
+            ❌ EyeScan Failed
+        </button>
+
+    </div>
+
+    <div
+        id="scanResult"
+        class="scan-result hidden"
+    ></div>
+
+</div>
+
+<!-- EYESCAN PROTOTYPE -->
+<div id="eyeScanPanel" class="eye-scan-panel hidden">
+
+    <div class="eye-scan-icon">👁️</div>
+
+    <h3>EyeScan</h3>
+
+    <p>
+        Biometric Verification • Prototype Demo
+    </p>
+
+    <div id="scanStatus">
+        Ready to scan.
+    </div>
+
+    <div id="scanAnimation">
+        👁️
+    </div>
+
+    <button
+    type="button"
+    id="startEyeScan"
+    class="verification-button"
+    onclick="startEyeScanDemo()"
+>
+
+   🔐 Start EyeScan
+    </button>
+
+   <div id="eyeScanActions" class="hidden">
+
+    <button
+        type="button"
+ id="eyeScanPass"
+        class="verification-button"
+        onclick="showEyeScanResult('pass')"
+    >
+        ✅ Verification Passed
+    </button>
+
+    <button
+        type="button"
+             id="eyeScanFail"
+        class="cancel-button"
+        onclick="showEyeScanResult('fail')"
+    >
+        ❌ Verification Failed
+    </button>
+
+</div>
+
+    <div
+        id="scanResult"
+        class="scan-result hidden"
+    ></div>
+
+</div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             RECENT TRANSACTIONS
+        ================================================== -->
+
+        <section class="panel transactions-panel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <h2>
+                        📋 Recent Transactions
+                    </h2>
+
+                    <p>
+                        Latest transactions analyzed by SIMShield AI
+                    </p>
+
+                </div>
+
+                <button
+                    class="refresh-button"
+                    onclick="loadTransactions()"
+                >
+                    🔄 Refresh
+                </button>
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+    <th>ID</th>
+    <th>User ID</th>
+    <th>Risk Level</th>
+    <th>Risk Score</th>
+    <th>Action</th>
+    <th>Prediction</th>
+    <th>Time</th>
+</tr>
+                    </thead>
+
+                    <tbody id="transactionsTable">
+
+                        <tr>
+
+                            <td
+                                colspan="7"
+                                class="empty-table"
+                            >
+                                No transactions yet.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             HUMAN REVIEW SECTION
+        ================================================== -->
+
+        <section class="panel review-panel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <h2>
+                        👤 Human Feedback Loop
+                    </h2>
+
+                    <p>
+                        Human corrections help improve future fraud detection.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="review-info">
+
+                <div class="review-step">
+
+                    <span>
+                        1
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            AI Prediction
+                        </strong>
+
+                        <p>
+                            Model analyzes transaction signals.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="review-arrow">
+                    →
+                </div>
+
+
+                <div class="review-step">
+
+                    <span>
+                        2
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Human Review
+                        </strong>
+
+                        <p>
+                            Reviewer confirms fraud or legitimate.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="review-arrow">
+                    →
+                </div>
+
+
+                <div class="review-step">
+
+                    <span>
+                        3
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Model Improvement
+                        </strong>
+
+                        <p>
+                            Feedback becomes training data.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer>
+
+        <p>
+            🛡️ SIMShield AI — Hackathon Prototype
+        </p>
+
+        <p>
+            Uses synthetic/demo security signals. No real banking credentials are collected.
+        </p>
+
+    </footer>
+
+
+    <!-- JavaScript -->
+
+    <script src="app.js"></script>
+
+</body>
+
+</html>
